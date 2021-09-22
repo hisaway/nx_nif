@@ -24,7 +24,8 @@ defmodule NxNif.MixProject do
   defp deps do
     [
       {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", branch: "main", sparse: "nx"},
-      {:elixir_make, "~> 0.4", runtime: false}
+      {:elixir_make, "~> 0.4", runtime: false},
+      {:benchee, "~> 1.0", only: :dev}
     ]
   end
 end
