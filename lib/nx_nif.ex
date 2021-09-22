@@ -8,7 +8,7 @@ defmodule NxNif do
   @on_load :load_nif
 
   def load_nif do
-    nif_file = 'priv/libnif'
+    nif_file = '#{Application.app_dir(:nx_nif, "priv/libnif")}'
 
     case :erlang.load_nif(nif_file, 0) do
       :ok -> :ok

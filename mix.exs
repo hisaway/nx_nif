@@ -8,8 +8,10 @@ defmodule NxNif.MixProject do
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      compilers: [:elixir_make] ++ Mix.compilers(),
-      make_clean: ["clean"]
+      compilers: [:elixir_make | Mix.compilers()],
+      make_targets: ["all"],
+      make_clean: ["clean"],
+      build_embedded: true
     ]
   end
 
