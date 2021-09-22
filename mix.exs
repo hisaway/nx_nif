@@ -4,7 +4,7 @@ defmodule NxNif.MixProject do
   def project do
     [
       app: :nx_nif,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
