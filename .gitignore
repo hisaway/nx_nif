@@ -26,3 +26,5 @@ nx_nif-*.tar
 /tmp/
 
 /priv/
+
+/.vscode/

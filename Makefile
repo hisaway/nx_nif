@@ -14,7 +14,7 @@ ERL_LDFLAGS ?= -L$(ERL_EI_LIBDIR)
 
 CFLAGS += -I/usr/local/include -I/usr/include -I/usr/local/lib
 LDFLAGS += -L/usr/lib -shared
-CFLAGS += -std=c11 -O3 -Wall -Wextra -Wno-unused-function -Wno-unused-parameter -Wmissing-field-initializers
+CFLAGS += -std=c11 -O3 -Wall -Wextra -Wno-unused-function -Wno-unused-parameter -Wno-missing-field-initializers
 
 ifeq ($(CROSSCOMPILE),)
 	ifneq ($(OS),Windows_NT)
