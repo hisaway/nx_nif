@@ -22,17 +22,14 @@ static ERL_NIF_TERM sin32_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[
 
     ERL_NIF_TERM binary_term = argv[1];
     ErlNifBinary binary_data;
-    if(__builtin_expect(!enif_term_to_binary(env, binary_term, &binary_data), false)) {
+    if(__builtin_expect(!enif_inspect_binary(env, binary_term, &binary_data), false)) {
         return enif_make_badarg(env);
     }
 
-    float *array = (float *)(&binary_data.data[6]);
+    float *array = (float *)(&binary_data.data[0]);
     sin32(vec_size, array);
 
-    if(__builtin_expect(enif_binary_to_term(env, binary_data.data, binary_data.size, &binary_term, 0) == 0, false)) {
-        return enif_make_badarg(env);
-    }
-    return binary_term;
+    return enif_make_binary(env, &binary_data);
 }
 
 static ErlNifFunc nif_funcs[] = 
