@@ -1,21 +1,11 @@
 # NxNif
 
-**TODO: Add description**
+This is a sample code that Nx with the Binary Backend communicates with NIFs.
 
-## Installation
+## License
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `nx_nif` to your list of dependencies in `mix.exs`:
+Copyright (c) 2021 Susumu Yamazaki
 
-```elixir
-def deps do
-  [
-    {:nx_nif, "~> 0.1.0"}
-  ]
-end
-```
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/nx_nif](https://hexdocs.pm/nx_nif).
-
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
