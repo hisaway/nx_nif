@@ -26,7 +26,7 @@ static ERL_NIF_TERM sin32_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[
         return enif_make_badarg(env);
     }
 
-    float *array = (float *)(&binary_data.data[0]);
+    float *array = (float *)binary_data.data;
     sin32(vec_size, array);
 
     return enif_make_binary(env, &binary_data);
