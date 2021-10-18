@@ -6,6 +6,7 @@ Benchee.run(
   %{
     "NIF 32" => fn -> NxNif.sin32(input_f32) end,
     "NIF 16 mac" => fn -> NxNif.sin16_mac(input_f16) end,
+    "NIF 16 mac horner" => fn -> NxNif.sin16_mac_horner(input_f16) end,
     "Nx" => fn -> Nx.sin(input_f32_pi) end,
   }
 ) \
