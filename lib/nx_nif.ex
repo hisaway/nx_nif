@@ -42,6 +42,31 @@ defmodule NxNif do
 
   def sin32_nif(_size, _x), do: raise("NIF sin32_nif/2 not implemented")
 
+  def sin16_mac(x) when is_struct(x, Nx.Tensor) do
+    if Nx.type(x) == {:f, 16} do
+      x
+    else
+      Nx.as_type(x, {:f, 16})
+    end
+    |> sin16_mac_sub()
+  end
+
+  def sin16_mac(x) when is_number(x) do
+    sin16_mac(Nx.tensor([x]))
+  end
+
+  defp sin16_mac_sub(t) do
+    %{
+      t
+      | data: %{
+          t.data
+          | state: sin16_mac_nif(Nx.size(t), t.data.state)
+        }
+    }
+  end
+
+  def sin16_mac_nif(_size, _x), do: raise("NIF sin16_mac_nif/2 not implemented")
+
   @doc """
   Hello world.
 
