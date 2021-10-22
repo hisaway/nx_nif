@@ -5,11 +5,12 @@
 
 #define PI 3.1415926535897932384626433832795028841971
 
-void sin16_mac_horner(uint64_t size, __fp16 *array)
+void sin16_mac_horner(uint64_t size, __fp16 *in, __fp16 *out)
 {
-    __fp16 *p = array;
+    __fp16 *pin = in;
+    __fp16 *pout = out;
     for(uint64_t i = 0; i < size; i++) {
-        __fp16 x = *p;
+        __fp16 x = *pin++;
         x = x - floor(x);
         if(x >= 0.5) {
             x = 0.5 - x;
@@ -27,16 +28,16 @@ void sin16_mac_horner(uint64_t size, __fp16 *array)
         y *= xx;
         y += 1;
         y *= x;
-        *p = y;
-        p++;
+        *pout++ = y;
     }
 }
 
-void sin16_mac(uint64_t size, __fp16 *array)
+void sin16_mac(uint64_t size, __fp16 *in, __fp16 *out)
 {
-    __fp16 *p = array;
+    __fp16 *pin = in;
+    __fp16 *pout = out;
     for(uint64_t i = 0; i < size; i++) {
-        __fp16 x = *p;
+        __fp16 x = *pin++;
         x = x - floor(x);
         if(x >= 0.5) {
             x = 0.5 - x;
@@ -45,18 +46,17 @@ void sin16_mac(uint64_t size, __fp16 *array)
             x = 0.5 - x;
         }
         x *= 2 * PI;
-        *p = x 
+        *pout++ = x 
             - (x * x * x) / 6 
             + (x * x * x * x * x) / 120 
             - (x * x * x * x * x * x * x) / 5040;
-        p++;
     }
 }
 
-void sin32(uint64_t size, float *array)
+void sin32(uint64_t size, float *in, float *out)
 {
     for(uint64_t i = 0; i < size; i++) {
-        array[i] = sin(array[i] * 2 * PI);
+        out[i] = sin(in[i] * 2 * PI);
     }
 }
 
@@ -71,15 +71,21 @@ static ERL_NIF_TERM sin16_mac_horner_nif(ErlNifEnv *env, int argc, const ERL_NIF
     }
 
     ERL_NIF_TERM binary_term = argv[1];
-    ErlNifBinary binary_data;
-    if(__builtin_expect(!enif_inspect_binary(env, binary_term, &binary_data), false)) {
+    ErlNifBinary in_data;
+    if(__builtin_expect(!enif_inspect_binary(env, binary_term, &in_data), false)) {
         return enif_make_badarg(env);
     }
 
-    __fp16 *array = (__fp16 *)binary_data.data;
-    sin16_mac_horner(vec_size, array);
+    __fp16 *in = (__fp16 *)in_data.data;
+    ErlNifBinary out_data;
+    if(__builtin_expect(!enif_alloc_binary(vec_size * sizeof(__fp16), &out_data), false)) {
+        return enif_make_badarg(env);
+    }
+    __fp16 *out = (__fp16 *)out_data.data;
 
-    return enif_make_binary(env, &binary_data);
+    sin16_mac_horner(vec_size, in, out);
+
+    return enif_make_binary(env, &out_data);
 }
 
 static ERL_NIF_TERM sin16_mac_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
@@ -93,15 +99,21 @@ static ERL_NIF_TERM sin16_mac_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM a
     }
 
     ERL_NIF_TERM binary_term = argv[1];
-    ErlNifBinary binary_data;
-    if(__builtin_expect(!enif_inspect_binary(env, binary_term, &binary_data), false)) {
+    ErlNifBinary in_data;
+    if(__builtin_expect(!enif_inspect_binary(env, binary_term, &in_data), false)) {
         return enif_make_badarg(env);
     }
 
-    __fp16 *array = (__fp16 *)binary_data.data;
-    sin16_mac(vec_size, array);
+    __fp16 *in = (__fp16 *)in_data.data;
+    ErlNifBinary out_data;
+    if(__builtin_expect(!enif_alloc_binary(vec_size * sizeof(__fp16), &out_data), false)) {
+        return enif_make_badarg(env);
+    }
+    __fp16 *out = (__fp16 *)out_data.data;
 
-    return enif_make_binary(env, &binary_data);
+    sin16_mac(vec_size, in, out);
+
+    return enif_make_binary(env, &out_data);
 }
 
 static ERL_NIF_TERM sin32_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
@@ -115,15 +127,21 @@ static ERL_NIF_TERM sin32_nif(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[
     }
 
     ERL_NIF_TERM binary_term = argv[1];
-    ErlNifBinary binary_data;
-    if(__builtin_expect(!enif_inspect_binary(env, binary_term, &binary_data), false)) {
+    ErlNifBinary in_data;
+    if(__builtin_expect(!enif_inspect_binary(env, binary_term, &in_data), false)) {
         return enif_make_badarg(env);
     }
 
-    float *array = (float *)binary_data.data;
-    sin32(vec_size, array);
+    float *in = (float *)in_data.data;
+    ErlNifBinary out_data;
+    if(__builtin_expect(!enif_alloc_binary(vec_size * sizeof(float), &out_data), false)) {
+        return enif_make_badarg(env);
+    }
+    float *out = (float *)out_data.data;
 
-    return enif_make_binary(env, &binary_data);
+    sin32(vec_size, in, out);
+
+    return enif_make_binary(env, &out_data);
 }
 
 static ErlNifFunc nif_funcs[] = 
