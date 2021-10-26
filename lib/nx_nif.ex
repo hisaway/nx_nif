@@ -42,6 +42,56 @@ defmodule NxNif do
 
   def sin32_nif(_size, _x), do: raise("NIF sin32_nif/2 not implemented")
 
+  def sin32_mac(x) when is_struct(x, Nx.Tensor) do
+    if Nx.type(x) == {:f, 32} do
+      x
+    else
+      Nx.as_type(x, {:f, 32})
+    end
+    |> sin32_mac_sub()
+  end
+
+  def sin32_mac(x) when is_number(x) do
+    sin32_mac(Nx.tensor([x]))
+  end
+
+  defp sin32_mac_sub(t) do
+    %{
+      t
+      | data: %{
+          t.data
+          | state: sin32_mac_nif(Nx.size(t), t.data.state)
+        }
+    }
+  end
+
+  def sin32_mac_nif(_size, _x), do: raise("NIF sin32_mac_nif/2 not implemented")
+
+  def sin32_mac_horner(x) when is_struct(x, Nx.Tensor) do
+    if Nx.type(x) == {:f, 32} do
+      x
+    else
+      Nx.as_type(x, {:f, 32})
+    end
+    |> sin32_mac_horner_sub()
+  end
+
+  def sin32_mac_horner(x) when is_number(x) do
+    sin32_mac_horner(Nx.tensor([x]))
+  end
+
+  defp sin32_mac_horner_sub(t) do
+    %{
+      t
+      | data: %{
+          t.data
+          | state: sin32_mac_horner_nif(Nx.size(t), t.data.state)
+        }
+    }
+  end
+
+  def sin32_mac_horner_nif(_size, _x), do: raise("NIF sin32_mac_horner_nif/2 not implemented")
+
   def sin16_mac(x) when is_struct(x, Nx.Tensor) do
     if Nx.type(x) == {:f, 16} do
       x
