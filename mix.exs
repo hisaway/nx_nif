@@ -5,7 +5,7 @@ defmodule NxNif.MixProject do
     [
       app: :nx_nif,
       version: "0.2.1",
-      elixir: "~> 1.12",
+      elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       compilers: [:elixir_make | Mix.compilers()],
@@ -25,10 +25,10 @@ defmodule NxNif.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:exla, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "exla"},
-      {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", branch: "main", sparse: "nx", override: true},
+      {:exla, "~> 0.9"},
+      {:nx, "~> 0.5"},
       {:elixir_make, "~> 0.4", runtime: false},
-      {:benchee, "~> 1.0", only: :dev}
+      {:benchee, "~> 1.0", only: :dev},
     ]
   end
 end
