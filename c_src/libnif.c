@@ -5,6 +5,10 @@
 
 #define PI 3.1415926535897932384626433832795028841971
 
+#ifndef __ARM_FP16_FORMAT_IEEE
+typedef float __fp16;  // もしくは、16ビット整数として扱う
+#endif
+
 void sin16_mac_horner(uint64_t size, __fp16 *in, __fp16 *out)
 {
     __fp16 *pin = in;
